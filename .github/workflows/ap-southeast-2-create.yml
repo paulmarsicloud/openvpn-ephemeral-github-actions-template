@@ -1,0 +1,22 @@
+name: ap-southeast-2 OpenVPN Create
+
+on:
+  workflow_dispatch:
+
+env:
+  region: ap-southeast-2
+  public_ip: <REPLACE ME>
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container: paulmarsicloud/terragrunt-awscli:latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: ./.github/actions/build
+        with:
+          aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          region: ${{ env.region }}
+          public_ip: ${{ env.public_ip }}

@@ -1,0 +1,22 @@
+name: us-east-1 OpenVPN Destroy
+
+on:
+  workflow_dispatch:
+
+env:
+  region: us-east-1
+  public_ip: <REPLACE ME>
+
+jobs:
+  destroy:
+    runs-on: ubuntu-latest
+    container: paulmarsicloud/terragrunt-awscli:latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: ./.github/actions/destroy
+        with:
+          aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          region: ${{ env.region }}
+          public_ip: ${{ env.public_ip }}

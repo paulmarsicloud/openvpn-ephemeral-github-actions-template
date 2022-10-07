@@ -1,0 +1,30 @@
+name: Destroy
+description: Destroy EC2 OpenVPN instance
+
+inputs:
+  aws_access_key_id:
+    description: AWS Access Key ID
+    required: true
+  aws_secret_access_key:
+    description: AWS Secret Access Key ID
+    required: true
+  region:
+    description: Region where OpenVPN instance will be deployed
+    required: true
+  public_ip:
+    description: IP Address nominated to connect to OpenVPN endpoint
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Terragrunt Destroy
+      shell: bash
+      run: |
+        terragrunt init --terragrunt-non-interactive
+        terragrunt destroy -auto-approve
+      env:
+        AWS_ACCESS_KEY_ID: ${{ inputs.aws_access_key_id }}
+        AWS_SECRET_ACCESS_KEY: ${{ inputs.aws_secret_access_key }}
+        TF_VAR_public_ip: ${{ inputs.public_ip }}
+        AWS_DEFAULT_REGION: ${{ env.region }}
